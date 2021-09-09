@@ -245,6 +245,7 @@ void Dijkstra(Graph g, string start, string end) {
     priority_queue <ipair, vector<ipair> , greater<ipair>> pq; 
     map <string, string> prev; 
     map <string, double> dist; 
+    double minDist = 0;
 
     for(auto x: g) { 
         prev[x.first] = ""; 
@@ -268,11 +269,15 @@ void Dijkstra(Graph g, string start, string end) {
                 prev[v] = u ;
             }
             if (v == end) {
-                kt = true; 
+                kt = true;
+                minDist = dist[v]; 
             }
         }
     }
-    if (kt == false ) cout<<"No path \n";  
+    if (kt == false ){
+        minDist = -1;
+        cout<<"No path \n";
+    }  
     else { 
         cout<<"Path founded, shortest path is : "<<endl; 
         stack <string> path; 
@@ -289,7 +294,7 @@ void Dijkstra(Graph g, string start, string end) {
         }
         cout<<end<<endl; 
     }
-
+    cout << "Khoang cach nho nhat la: "<<minDist<<endl;
 }
 
 void Prim_mst(Graph g) { 

@@ -120,6 +120,12 @@ void resetPageRank(Graph g){
     }
 }
 
+void swap(int *x, int *y){
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
 int main () 
 { 
     Graph g;
@@ -138,7 +144,10 @@ int main ()
     string pageRankMax;
     string pageRankMax2;
     string pageRankMin;
-    int m;
+
+    //case 5 varaiable
+    bool check1=false;
+    bool check2=false;
 
     // doc webpages lưu vào struct
     string* pages;
@@ -174,6 +183,12 @@ int main ()
         }
     }
     resetPageRank(g);
+
+    //case 3 varaiable
+    int m;
+    double rank[count];
+    int index = 0;
+
     int menu;
     while(1){
         cout << "------------------------------MENU-------------------------------" << endl;
@@ -238,7 +253,29 @@ int main ()
             case 3:
             cout << "nhap m: "; cin>>m;
             pageRank_Algo(g,m,count);
-
+            displayPageRank(g);
+            for(auto x: g){
+                rank[index] = pageRank[x.first];
+                index++;
+            }
+            for(int i=0; i<count-1; i++){
+                for(int j=i+1; j<count; j++){
+                    if(rank[i] < rank[j]) swap(rank[i], rank[j]);
+                }
+            }
+            cout <<endl<< "top 3 trang web quan trong nhat:"<<endl;
+            for(int i=0; i<3; i++){
+                for(auto x: g){
+                    if(pageRank[x.first] == rank[i]){
+                        for(auto y : link){
+                            if(y.id == x.first){
+                                cout <<y.url<< endl;
+                            }
+                        }
+                    }
+                }
+            }
+            resetPageRank(g);
             break;
             case 4:
             for(auto x:g){
@@ -255,7 +292,16 @@ int main ()
             case 5:
             cout << "nhap id1: "; cin>>id1;
             cout << "nhap id2: "; cin>>id2;
-            Dijkstra(g,id1,id2);
+            for(auto x:g){
+                if(id1 == x.first) check1 = true;
+                if(id2 == x.first) check2 = true;
+            }
+            if(id1 == id2 || check1 == false || check2 == false){
+                cout <<"sai cu phap nhap vao"<<endl<<"khoang cach nho nhat la: -1"<< endl;
+            }
+            else{
+                Dijkstra(g,id1,id2);
+            }
             // for(auto x: g){
             //     for(auto y: x.second){
             //         cout << x.first << "---" << y.first << endl;
